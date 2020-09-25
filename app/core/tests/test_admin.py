@@ -14,7 +14,7 @@ class AdminSiteTests(TestCase):
         self.client.force_login(self.admin_user)
         self.user = get_user_model().objects.create_user(
             email='regular@domain.com',
-            passwrod='password123',
+            password='password123',
             name='Test user full name'
         )
 
@@ -25,4 +25,12 @@ class AdminSiteTests(TestCase):
 
         self.assertContains(res, self.user.name)
         self.assertContains(res, self.user.email)
-        
+
+
+    def test_user_change_page(self):
+        """Test that the user edit page works"""
+        url = reverse('admin:core_user_change', args=[self.user.id])
+        # /admin/core/user/
+        res = self.client.get(url)
+
+        self.assertEqual(res.status_code, 200)
